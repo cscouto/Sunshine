@@ -15,15 +15,9 @@
 -->
 <resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
 
-    <!-- - - - - - - - - - - - - -->
-    <!-- Used throughout Sunshine-->
-    <!-- - - - - - - - - - - - - -->
-
-    <!--Used in Action Bar, and in AndroidManifest to tell the device the name of this app.-->
-    <!--It's good to keep this short, so your launcher icon isn't displayed with "The greatest Wea"-->
-    <!--or something similar.-->
     <string name="app_name">Sunshine</string>
 
+    <string name="refresh">Refresh</string>
 
     <!-- - - - - - - - - - - - - -->
     <!--Used by SunshineDateUtils-->
