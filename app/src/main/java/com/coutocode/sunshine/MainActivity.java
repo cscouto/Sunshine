@@ -66,8 +66,9 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.F
 
     @Override
     public void click(String param) {
-        Intent intent = new Intent(this, DetailActivity.class);
-        startActivity(intent);
+        Intent intentToStartDetailActivity = new Intent(this, DetailActivity.class);
+        intentToStartDetailActivity.putExtra("weatherData", param);
+        startActivity(intentToStartDetailActivity);
     }
 
     class FetchWeatherTask extends AsyncTask<String, Void, String[]>{
