@@ -10,16 +10,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.coutocode.sunshine.data.SunshinePreferences;
 import com.coutocode.sunshine.utilities.NetworkUtils;
 import com.coutocode.sunshine.utilities.OpenWeatherJsonUtils;
-import com.coutocode.sunshine.utilities.SunshineWeatherUtils;
 
-import java.io.IOException;
 import java.net.URL;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ForecastAdapter.ForecastAdapterOnClickHandler {
 
     TextView mErrorTextView;
     ProgressBar mWeatherProgressBar;
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
-        mForecastAdapter = new ForecastAdapter();
+        mForecastAdapter = new ForecastAdapter(this);
         mRecyclerView.setAdapter(mForecastAdapter);
 
         loadWeatherData();
@@ -62,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    @Override
+    public void click(String param) {
+        Toast.makeText(this,param, Toast.LENGTH_LONG).show();
     }
 
     class FetchWeatherTask extends AsyncTask<String, Void, String[]>{
