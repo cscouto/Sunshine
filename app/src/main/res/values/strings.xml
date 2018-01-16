@@ -19,6 +19,8 @@
 
     <string name="refresh">Refresh</string>
 
+    <string name="error_message">Unable to load the weather data.</string>
+
     <!-- - - - - - - - - - - - - -->
     <!--Used by SunshineDateUtils-->
     <!-- - - - - - - - - - - - - -->
