@@ -1,26 +1,50 @@
 package com.coutocode.sunshine;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.coutocode.sunshine.utilities.NetworkUtils;
 import com.coutocode.sunshine.utilities.SunshineWeatherUtils;
+
+import java.io.IOException;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView mWeathertextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mWeathertextView = findViewById(R.id.tv_weather_data);
+        loadWeatherData("");
+    }
 
-        String[] weatherForecast = {"test1", "test2"};
+    class RequestWeatherTask extends AsyncTask<URL, Void, String>{
 
-        for (String weather: weatherForecast){
-            mWeathertextView.append(weather + "\n\n\n");
+        @Override
+        protected String doInBackground(URL... urls) {
+            URL searchUrl = urls[0];
+            String results = null;
+            try {
+                results = NetworkUtils.getResponseFromHttpUrl(searchUrl);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return results;
         }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //display the data
+            super.onPostExecute(s);
+        }
+    }
+
+    void loadWeatherData(String location){
+        URL locationWeather = NetworkUtils.buildUrl(location);
+        new RequestWeatherTask().execute(locationWeather);
     }
 }
