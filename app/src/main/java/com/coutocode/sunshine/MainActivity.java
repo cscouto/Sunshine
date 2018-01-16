@@ -58,6 +58,12 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.F
                 mForecastAdapter.setWeatherData(null);
                 loadWeatherData();
                 return true;
+            case R.id.action_map:
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

@@ -21,6 +21,10 @@
 
     <string name="error_message">Unable to load the weather data.</string>
 
+    <string name="map">Map</string>
+
+    <string name="share">Share</string>
+
     <!-- - - - - - - - - - - - - -->
     <!--Used by SunshineDateUtils-->
     <!-- - - - - - - - - - - - - -->
