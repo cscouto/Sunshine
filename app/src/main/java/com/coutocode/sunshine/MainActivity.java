@@ -1,5 +1,6 @@
 package com.coutocode.sunshine;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -65,7 +66,8 @@ public class MainActivity extends AppCompatActivity implements ForecastAdapter.F
 
     @Override
     public void click(String param) {
-        Toast.makeText(this,param, Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, DetailActivity.class);
+        startActivity(intent);
     }
 
     class FetchWeatherTask extends AsyncTask<String, Void, String[]>{
