@@ -1,20 +1,21 @@
 package com.coutocode.sunshine;
 
-import android.content.AsyncTaskLoader;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.coutocode.sunshine.data.SunshinePreferences;
 import com.coutocode.sunshine.utilities.NetworkUtils;
@@ -24,13 +25,15 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity
         implements ForecastAdapter.ForecastAdapterOnClickHandler,
-        LoaderManager.LoaderCallbacks<String[]> {
+        LoaderManager.LoaderCallbacks<String[]>,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     TextView mErrorTextView;
     ProgressBar mWeatherProgressBar;
     private RecyclerView mRecyclerView;
     ForecastAdapter mForecastAdapter;
     private static final int FORECAST_LOADER_ID = 0;
+    private static boolean PREFERENCES_HAVE_BEEN_UPDATED = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +55,25 @@ public class MainActivity extends AppCompatActivity
         LoaderManager.LoaderCallbacks<String[]> callback = MainActivity.this;
         Bundle bundleForLoader = null;
         getSupportLoaderManager().initLoader(loaderId, bundleForLoader, callback);
+
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (PREFERENCES_HAVE_BEEN_UPDATED) {
+            Log.d("", "onStart: preferences were updated");
+            getSupportLoaderManager().restartLoader(FORECAST_LOADER_ID, null, this);
+            PREFERENCES_HAVE_BEEN_UPDATED = false;
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -68,10 +90,7 @@ public class MainActivity extends AppCompatActivity
                 loadWeatherData();
                 return true;
             case R.id.action_map:
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                if (intent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(intent);
-                }
+                openLocationInMap();
                 return true;
             case R.id.action_settings:
                 Intent intentSettingsActivity = new Intent(this, SettingsActivity.class);
@@ -160,5 +179,23 @@ public class MainActivity extends AppCompatActivity
     void showErrorMessage(){
         mErrorTextView.setVisibility(View.VISIBLE);
         mRecyclerView.setVisibility(View.INVISIBLE);
+    }
+    private void openLocationInMap() {
+        String addressString = SunshinePreferences.getPreferredWeatherLocation(this);
+        Uri geoLocation = Uri.parse("geo:0,0?q=" + addressString);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geoLocation);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Log.d("", "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+        PREFERENCES_HAVE_BEEN_UPDATED = true;
     }
 }
