@@ -48,6 +48,10 @@ public class DetailActivity extends AppCompatActivity {
                     startActivity(shareIntent);
                 }
                 return true;
+            case R.id.action_settings:
+                Intent intentSettingsActivity = new Intent(this, SettingsActivity.class);
+                startActivity(intentSettingsActivity);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
