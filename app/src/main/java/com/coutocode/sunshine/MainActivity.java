@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 
 import com.coutocode.sunshine.data.SunshinePreferences;
 import com.coutocode.sunshine.data.WeatherContract;
+import com.coutocode.sunshine.utilities.FakeDataUtils;
 
 
 public class MainActivity extends AppCompatActivity
@@ -48,6 +49,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FakeDataUtils.insertFakeData(this);
+        
         mWeatherProgressBar = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
         mRecyclerView = (RecyclerView)findViewById(R.id.recyclerview_forecast);
