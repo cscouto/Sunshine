@@ -26,6 +26,10 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
         this.mContext = mContext;
     }
 
+    public interface ForecastAdapterOnClickHandler {
+        void onClick(long date);
+    }
+
     @Override
     public ForecastAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -70,13 +74,10 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
 
         @Override
         public void onClick(View view) {
-            //  COMPLETED (13) Instead of passing the String from the data array, use the weatherSummary text!
-            String weatherForDay = mWeatherTextView.getText().toString();
-            mCLickHandler.click(weatherForDay);
+            int adapterPosition = getAdapterPosition();
+            mCursor.moveToPosition(adapterPosition);
+            long dateInMillis = mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
+            mCLickHandler.onClick(dateInMillis);
         }
-    }
-
-    interface ForecastAdapterOnClickHandler {
-        void click(String param);
     }
 }
