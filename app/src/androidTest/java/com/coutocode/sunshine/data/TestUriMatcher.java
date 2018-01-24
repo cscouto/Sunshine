@@ -26,8 +26,8 @@ import org.junit.runner.RunWith;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import static com.example.android.sunshine.data.TestUtilities.getStaticIntegerField;
-import static com.example.android.sunshine.data.TestUtilities.studentReadableNoSuchField;
+import static com.coutocode.sunshine.data.TestUtilities.getStaticIntegerField;
+import static com.coutocode.sunshine.data.TestUtilities.studentReadableNoSuchField;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.fail;
 

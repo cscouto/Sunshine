@@ -22,8 +22,8 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 
-import com.example.android.sunshine.utilities.SunshineDateUtils;
-import com.example.android.sunshine.utils.PollingCheck;
+import com.coutocode.sunshine.utilities.SunshineDateUtils;
+import com.coutocode.sunshine.utils.PollingCheck;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -32,14 +32,14 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.example.android.sunshine.data.WeatherContract.WeatherEntry.COLUMN_DATE;
-import static com.example.android.sunshine.data.WeatherContract.WeatherEntry.COLUMN_DEGREES;
-import static com.example.android.sunshine.data.WeatherContract.WeatherEntry.COLUMN_HUMIDITY;
-import static com.example.android.sunshine.data.WeatherContract.WeatherEntry.COLUMN_MAX_TEMP;
-import static com.example.android.sunshine.data.WeatherContract.WeatherEntry.COLUMN_MIN_TEMP;
-import static com.example.android.sunshine.data.WeatherContract.WeatherEntry.COLUMN_PRESSURE;
-import static com.example.android.sunshine.data.WeatherContract.WeatherEntry.COLUMN_WEATHER_ID;
-import static com.example.android.sunshine.data.WeatherContract.WeatherEntry.COLUMN_WIND_SPEED;
+import static com.coutocode.sunshine.data.WeatherContract.WeatherEntry.COLUMN_DATE;
+import static com.coutocode.sunshine.data.WeatherContract.WeatherEntry.COLUMN_DEGREES;
+import static com.coutocode.sunshine.data.WeatherContract.WeatherEntry.COLUMN_HUMIDITY;
+import static com.coutocode.sunshine.data.WeatherContract.WeatherEntry.COLUMN_MAX_TEMP;
+import static com.coutocode.sunshine.data.WeatherContract.WeatherEntry.COLUMN_MIN_TEMP;
+import static com.coutocode.sunshine.data.WeatherContract.WeatherEntry.COLUMN_PRESSURE;
+import static com.coutocode.sunshine.data.WeatherContract.WeatherEntry.COLUMN_WEATHER_ID;
+import static com.coutocode.sunshine.data.WeatherContract.WeatherEntry.COLUMN_WIND_SPEED;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
 import static junit.framework.Assert.assertNotNull;
