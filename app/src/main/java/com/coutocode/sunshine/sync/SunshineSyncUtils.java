@@ -17,19 +17,42 @@ package com.coutocode.sunshine.sync;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
-// COMPLETED (9) Create a class called SunshineSyncUtils
+import com.coutocode.sunshine.data.WeatherContract;
+
 public class SunshineSyncUtils {
-    //  COMPLETED (10) Create a public static void method called startImmediateSync
-    /**
-     * Helper method to perform a sync immediately using an IntentService for asynchronous
-     * execution.
-     *
-     * @param context The Context used to start the IntentService for the sync.
-     */
+
+    private static boolean sInitialized;
+    synchronized public static void initialize(@NonNull final Context context) {
+        if (sInitialized) return;
+        sInitialized = true;
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            public Void doInBackground( Void... voids ) {
+                Uri forecastQueryUri = WeatherContract.WeatherEntry.CONTENT_URI;
+                String[] projectionColumns = {WeatherContract.WeatherEntry._ID};
+                String selectionStatement = WeatherContract.WeatherEntry
+                        .getSqlSelectForTodayOnwards();
+                Cursor cursor = context.getContentResolver().query(
+                        forecastQueryUri,
+                        projectionColumns,
+                        selectionStatement,
+                        null,
+                        null);
+                if (null == cursor || cursor.getCount() == 0) {
+                    startImmediateSync(context);
+                }
+                cursor.close();
+                return null;
+            }
+        }.execute();
+    }
+
     public static void startImmediateSync(@NonNull final Context context) {
-//      COMPLETED (11) Within that method, start the SunshineSyncIntentService
         Intent intentToSyncImmediately = new Intent(context, SunshineSyncIntentService.class);
         context.startService(intentToSyncImmediately);
     }
