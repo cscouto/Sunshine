@@ -1,7 +1,6 @@
 package com.coutocode.sunshine;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.LoaderManager;
@@ -9,7 +8,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,7 +19,6 @@ import android.widget.ProgressBar;
 import com.coutocode.sunshine.data.SunshinePreferences;
 import com.coutocode.sunshine.data.WeatherContract;
 import com.coutocode.sunshine.sync.SunshineSyncUtils;
-import com.coutocode.sunshine.utilities.FakeDataUtils;
 
 
 public class MainActivity extends AppCompatActivity
@@ -51,9 +48,9 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        mWeatherProgressBar = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+        mWeatherProgressBar = findViewById(R.id.pb_loading_indicator);
 
-        mRecyclerView = (RecyclerView)findViewById(R.id.recyclerview_forecast);
+        mRecyclerView = findViewById(R.id.recyclerview_forecast);
         LinearLayoutManager layoutManager = new LinearLayoutManager(
                 this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
