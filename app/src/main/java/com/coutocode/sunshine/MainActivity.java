@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 
 import com.coutocode.sunshine.data.SunshinePreferences;
 import com.coutocode.sunshine.data.WeatherContract;
+import com.coutocode.sunshine.sync.SunshineSyncUtils;
 import com.coutocode.sunshine.utilities.FakeDataUtils;
 
 
@@ -49,8 +50,6 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        FakeDataUtils.insertFakeData(this);
         
         mWeatherProgressBar = (ProgressBar) findViewById(R.id.pb_loading_indicator);
 
@@ -64,6 +63,7 @@ public class MainActivity extends AppCompatActivity
 
         showLoading();
         getSupportLoaderManager().initLoader(ID_FORECAST_LOADER, null, this);
+        SunshineSyncUtils.startImmediateSync(this);
     }
 
     @Override
