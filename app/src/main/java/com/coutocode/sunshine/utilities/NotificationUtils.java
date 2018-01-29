@@ -12,8 +12,7 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
-
-import com.coutocode.sunshine.DetailActivity;
+import com.coutocode.sunshine.Activity.DetailActivity;
 import com.coutocode.sunshine.R;
 import com.coutocode.sunshine.data.SunshinePreferences;
 import com.coutocode.sunshine.data.WeatherContract;

@@ -1,8 +1,9 @@
-package com.coutocode.sunshine;
+package com.coutocode.sunshine.Activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import com.coutocode.sunshine.R;
 
 public class SettingsActivity extends AppCompatActivity {
 

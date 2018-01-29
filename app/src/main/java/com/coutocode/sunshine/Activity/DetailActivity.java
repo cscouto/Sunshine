@@ -1,4 +1,4 @@
-package com.coutocode.sunshine;
+package com.coutocode.sunshine.Activity;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -13,36 +13,20 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import com.coutocode.sunshine.data.WeatherContract;
+import com.coutocode.sunshine.R;
 import com.coutocode.sunshine.databinding.ActivityDetailBinding;
 import com.coutocode.sunshine.utilities.SunshineDateUtils;
 import com.coutocode.sunshine.utilities.SunshineWeatherUtils;
+import static com.coutocode.sunshine.utilities.Constants.*;
 
 public class DetailActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor> {
-    private static final String FORECAST_SHARE_HASHTAG = " #SunshineApp";
-    public static final String[] WEATHER_DETAIL_PROJECTION = {
-            WeatherContract.WeatherEntry.COLUMN_DATE,
-            WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
-            WeatherContract.WeatherEntry.COLUMN_MIN_TEMP,
-            WeatherContract.WeatherEntry.COLUMN_HUMIDITY,
-            WeatherContract.WeatherEntry.COLUMN_PRESSURE,
-            WeatherContract.WeatherEntry.COLUMN_WIND_SPEED,
-            WeatherContract.WeatherEntry.COLUMN_DEGREES,
-            WeatherContract.WeatherEntry.COLUMN_WEATHER_ID
-    };
-    public static final int INDEX_WEATHER_DATE = 0;
-    public static final int INDEX_WEATHER_MAX_TEMP = 1;
-    public static final int INDEX_WEATHER_MIN_TEMP = 2;
-    public static final int INDEX_WEATHER_HUMIDITY = 3;
-    public static final int INDEX_WEATHER_PRESSURE = 4;
-    public static final int INDEX_WEATHER_WIND_SPEED = 5;
-    public static final int INDEX_WEATHER_DEGREES = 6;
-    public static final int INDEX_WEATHER_CONDITION_ID = 7;
-    private static final int ID_DETAIL_LOADER = 353;
+    //vars
     private String mForecastSummary;
     private Uri mUri;
     private ActivityDetailBinding mDetailBinding;
+
+    //lifecycle events
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,14 +55,8 @@ public class DetailActivity extends AppCompatActivity implements
         }
         return super.onOptionsItemSelected(item);
     }
-    private Intent createShareForecastIntent() {
-        Intent shareIntent = ShareCompat.IntentBuilder.from(this)
-                .setType("text/plain")
-                .setText(mForecastSummary + FORECAST_SHARE_HASHTAG)
-                .getIntent();
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        return shareIntent;
-    }
+
+    //loader callbacks
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle loaderArgs) {
         switch (loaderId) {
@@ -147,5 +125,15 @@ public class DetailActivity extends AppCompatActivity implements
     }
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+    }
+
+    //custom functions
+    private Intent createShareForecastIntent() {
+        Intent shareIntent = ShareCompat.IntentBuilder.from(this)
+                .setType("text/plain")
+                .setText(mForecastSummary + FORECAST_SHARE_HASHTAG)
+                .getIntent();
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        return shareIntent;
     }
 }

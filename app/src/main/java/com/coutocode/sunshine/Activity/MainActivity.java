@@ -1,5 +1,4 @@
-
-package com.coutocode.sunshine;
+package com.coutocode.sunshine.Activity;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -17,61 +16,71 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
-
+import com.coutocode.sunshine.ForecastAdapter;
+import com.coutocode.sunshine.R;
 import com.coutocode.sunshine.data.SunshinePreferences;
 import com.coutocode.sunshine.data.WeatherContract;
 import com.coutocode.sunshine.sync.SunshineSyncUtils;
+import static com.coutocode.sunshine.utilities.Constants.*;
 
 public class MainActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>,
         ForecastAdapter.ForecastAdapterOnClickHandler {
-    private final String TAG = MainActivity.class.getSimpleName();
-    public static final String[] MAIN_FORECAST_PROJECTION = {
-            WeatherContract.WeatherEntry.COLUMN_DATE,
-            WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
-            WeatherContract.WeatherEntry.COLUMN_MIN_TEMP,
-            WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
-    };
-    public static final int INDEX_WEATHER_DATE = 0;
-    public static final int INDEX_WEATHER_MAX_TEMP = 1;
-    public static final int INDEX_WEATHER_MIN_TEMP = 2;
-    public static final int INDEX_WEATHER_CONDITION_ID = 3;
-    private static final int ID_FORECAST_LOADER = 44;
-    private ForecastAdapter mForecastAdapter;
+
+    //views
     private RecyclerView mRecyclerView;
-    private int mPosition = RecyclerView.NO_POSITION;
     private ProgressBar mLoadingIndicator;
 
+    //vars
+    private ForecastAdapter mForecastAdapter;
+    private final String TAG = MainActivity.class.getSimpleName();
+    private int mPosition = RecyclerView.NO_POSITION;
+
+    //lifecycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0f);
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_forecast);
-        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
+
+        //connect views
+        mRecyclerView = findViewById(R.id.recyclerview_forecast);
+        mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
+
+        //set recyclerView
         LinearLayoutManager layoutManager =
                 new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setHasFixedSize(true);
         mForecastAdapter = new ForecastAdapter(this, this);
         mRecyclerView.setAdapter(mForecastAdapter);
+
+        //get data
         showLoading();
         getSupportLoaderManager().initLoader(ID_FORECAST_LOADER, null, this);
         SunshineSyncUtils.initialize(this);
     }
-    private void openPreferredLocationInMap() {
-        double[] coords = SunshinePreferences.getLocationCoordinates(this);
-        String posLat = Double.toString(coords[0]);
-        String posLong = Double.toString(coords[1]);
-        Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(geoLocation);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        } else {
-            Log.d(TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
-        }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.forecast, menu);
+        return true;
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        if (id == R.id.action_map) {
+            openPreferredLocationInMap();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    //loader callbacks
     @Override
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle bundle) {
         switch (loaderId) {
@@ -102,12 +111,29 @@ public class MainActivity extends AppCompatActivity implements
     public void onLoaderReset(Loader<Cursor> loader) {
         mForecastAdapter.swapCursor(null);
     }
+
+    //adapter click callback
     @Override
     public void onClick(long date) {
         Intent weatherDetailIntent = new Intent(MainActivity.this, DetailActivity.class);
         Uri uriForDateClicked = WeatherContract.WeatherEntry.buildWeatherUriWithDate(date);
         weatherDetailIntent.setData(uriForDateClicked);
         startActivity(weatherDetailIntent);
+    }
+
+    //custom functions
+    private void openPreferredLocationInMap() {
+        double[] coords = SunshinePreferences.getLocationCoordinates(this);
+        String posLat = Double.toString(coords[0]);
+        String posLong = Double.toString(coords[1]);
+        Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geoLocation);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Log.d(TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
+        }
     }
     private void showWeatherDataView() {
         mLoadingIndicator.setVisibility(View.INVISIBLE);
@@ -116,24 +142,5 @@ public class MainActivity extends AppCompatActivity implements
     private void showLoading() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mLoadingIndicator.setVisibility(View.VISIBLE);
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.forecast, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        }
-        if (id == R.id.action_map) {
-            openPreferredLocationInMap();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }
